@@ -25,14 +25,14 @@ function renderMarks(marksJSON) {
         marksMarkups.push('<div class="item"><span class="mark-type">' + markType + ': </span><span class="mark">' + marksObject[subject][subjectCase][markType] + '</span></div>');
       }
 
-      if(marksMarkups.length) {
+      if (marksMarkups.length) {
         var marks = true;
         marksHTML += '<div class="col"><h3>' + subjectCase + '</h3>' + marksMarkups.join('') + '</div>';
       }
 
     }
 
-    if(!marks){
+    if (!marks) {
       marksHTML += '<span class="no-marks">Brak ocen</span></div>';
     }
 
@@ -46,34 +46,34 @@ var marksWrapper = document.getElementById('marks');
 var refreshBttn = document.getElementById('refreshBttn');
 
 function updateMarksTable() {
-  chrome.storage.local.get('marks', function(items) {
-    if(items.marks){
+  chrome.storage.local.get('marks', function (items) {
+    if (items.marks) {
       marksWrapper.innerHTML = renderMarks(items.marks);
     }
   });
 }
 
-chrome.storage.local.get('newMarksNotify', function(items) {
-  if(!items.newMarksNotify){
+chrome.storage.local.get('newMarksNotify', function (items) {
+  if (!items.newMarksNotify) {
     refreshBttn.style.display = 'none';
   }
 })
 
 updateMarksTable();
 
-document.getElementById('settingsBttn').addEventListener('click', function(e) {
+document.getElementById('settingsBttn').addEventListener('click', function (e) {
   e.preventDefault();
   chrome.tabs.create({url: "/options/options.html"});
 });
 
-refreshBttn.addEventListener('click', function(e){
+refreshBttn.addEventListener('click', function (e) {
   e.preventDefault();
   refreshBttn.classList.add("spin");
   chrome.runtime.sendMessage('updateMarks');
 });
 
 chrome.runtime.onMessage.addListener(function (msg) {
-  if(msg === 'marksUpdated'){
+  if (msg === 'marksUpdated') {
     updateMarksTable();
     refreshBttn.classList.remove("spin");
   }
