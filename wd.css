@@ -1,0 +1,282 @@
+.redirect-label{
+    position: relative;
+}
+.redirect-label input[type=checkbox]{
+	margin-left:0;
+	vertical-align: top;
+}
+#page_header{
+	background: url(icons/agh_logo.png) no-repeat;
+	background-size:40px;
+	background-position: 64px 10px;
+	position: absolute;
+	height:100px;
+	width:182px;
+}
+
+/* Logging in page */
+.login-page #page_header{
+	background-position: 50% 30px;
+	background-size: auto;
+	height:190px;
+	width:auto;
+	position: relative;
+}
+#logging_in_panel .login_field{
+	background: transparent;
+	height:auto;
+	padding-top: 0px;
+	margin-top: 10px;
+	text-align: center;
+}
+
+#logging_in_panel .login_field .label{
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 16px;
+	margin-right: 10px;
+	width: 127px;
+}
+
+#logging_in_panel .login_field input[type=text],
+#logging_in_panel .login_field input[type=password]{
+	background-color: #fff;
+	display: inline-block;
+	border: solid 3px #444;
+	width: 190px;
+	padding: 10px;
+	margin-left:0;
+}
+#logging_in_panel .login_field input[type=text]:focus,
+#logging_in_panel .login_field input[type=password]:focus{
+	outline: 3px solid #444;
+}
+
+#logging_in_panel .login_button{
+	text-align: center;
+	padding-top: 0px;
+}
+
+#logging_in_panel .login_button .przyciskM{
+	position: relative;
+	top: auto;
+	left: auto;
+	display:inline-block;
+	width: 355px;
+}
+
+#logging_in_panel .login_criteria{
+	background: transparent;
+	border-top: none;
+	margin-top: 0px;
+	padding-top: 0px;
+	padding-left: 0px;
+	position: relative;
+	top: auto;
+	margin-top: 30px;
+}
+
+#logging_in_panel .login_criteria .label{
+	display: block;
+	text-align: center;
+}
+
+#logging_in_panel .login_criteria table{
+	margin: 0px auto;
+}
+
+#logging_in_panel .login_criteria table td{
+	padding-top: 10px;
+	padding-right: 10px;
+}
+
+#logging_in_panel .error_label{
+	color: #F00;
+	padding-top: 10px;
+}
+
+#logging_in_panel .recovering_password{
+    position: relative;
+	top: auto;
+	left: auto;
+	display:block;
+	margin: 10px 0;
+}
+
+/* Style other pages */
+a[href]{
+	text-decoration: none !important;
+}
+a[href]:hover {
+    cursor: pointer;
+}
+a[href="#"]:hover {
+    cursor: default;
+}
+#page_middle_content {
+    margin: 0px auto;
+    position: static;
+}
+#page_footer {
+	background: none;
+}
+#page_footer *, #page_footer a{
+	color: #888;
+}
+
+#page_left_content, #page_right_content {
+    display: block;
+    vertical-align: top;
+    float: left;
+    padding: 0px;
+}
+#page_left_content{
+	width: 182px;
+	margin-top: 100px;
+}
+#page_right_content{
+	width: calc(100% - 182px);
+}
+
+#page_middle_content .page_title, #page_right_content .page_title {
+    background-color: transparent;
+    color: #000;
+    font-size: 34px;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#page_top_menu {
+    top: auto;
+    left: auto;
+    position: relative;
+}
+#page_language {
+    padding: 0px;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+input[type=button],
+button,
+input[type=submit],
+input[type=reset] {
+    background: #365485;
+    border: none;
+    color: #FFF;
+    cursor: pointer;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 40px;
+    margin: 2px;
+    padding: 0px 18px;
+}
+input[type=button]:hover,
+button:hover,
+input[type=submit]:hover,
+input[type=reset]:hover {
+    background: #273d61;
+}
+
+table.gridPadding{
+	border: none;
+	width:100%;
+}
+#page_right_content .gridPadding td,
+#page_right_content .gridPadding th,
+#page_middle_content .gridPadding td,
+#page_middle_content .gridPadding th {
+    border: 1px solid #b3babd !important;
+}
+#page_right_content table.gridPadding tr.gridDane td,
+#page_right_content table.gridPadding tr.gridDane th,
+#page_middle_content table.gridPadding tr.gridDane td,
+#page_middle_content table.gridPadding tr.gridDane th {
+    background-color: transparent;
+}
+table.gridPadding tr.gridDane:nth-child(2n){
+	background-color: #dfe1e2;
+}
+#page_right_content table.gridPadding tr.gridDane:hover{
+	background: #b3babd !important;
+}
+#page_right_content .gridPadding tr.gridDaneHead td,
+#page_right_content .gridPadding tr.gridDaneHead th{
+	background: transparent;
+	color: #000;
+	border-color: transparent !important;
+	border-bottom: 4px solid #444 !important;
+	padding-bottom:10px !important;
+}
+.who_is_logged_in{
+	top: 0;
+}
+#ctl00_ctl00_ContentPlaceHolder_RightContentPlaceHolder_pan_Akceptacja{
+	border: 2px solid rgb(251, 84, 19) !important;
+    width: auto !important;
+    border-right: none !important;
+    border-left: none !important;
+}
+#ctl00_ctl00_ContentPlaceHolder_RightContentPlaceHolder_butPop{
+    left: 3px;
+}
+
+/* menu */
+#page_left_menu {
+    padding-top: 0px;
+}
+#page_left_menu .RadMenu .rmVertical .rmSlide{
+	margin-left:4px;
+	box-shadow: 0 0 5px #273d61;
+}
+#page_left_menu .RadMenu .rmSlide .rmItem {
+    background: #365485 !important;
+    border: none !important;
+    top: 0px;
+}
+#page_left_menu .RadMenu .rmVertical .rmItem .rmLink,
+#page_left_menu .RadMenu .rmVertical .rmItem .rmLink:hover, 
+#page_left_menu .RadMenu .rmVertical .rmItem .rmLink.rmExpanded {
+    padding: 5px 5px 5px 9px;
+}
+#page_left_menu .RadMenu .rmVertical .rmItem {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: solid 2px #273d61 !important; 
+}
+#page_left_menu .RadMenu .rmVertical .rmItem:last-child{
+	border-bottom: none !important; 
+}
+#page_left_menu .RadMenu .rmVertical .rmItem .rmLink:hover,
+#page_left_menu .RadMenu .rmVertical .rmItem .rmLink.rmExpanded{
+	background-color: #273d61;
+}
+
+
+
+/* Animations */
+input[type=button],
+button,
+input[type=submit],
+input[type=reset],
+a[href],
+tr{
+	transition: all .2s ease;
+}
+
+/* Breakpoints */
+@media screen and (max-width: 930px){
+	#ctl00_ctl00_ContentPlaceHolder_RightContentPlaceHolder_dgDane tr td:nth-child(7){
+		display:none;
+	}
+}
+@media screen and (max-width: 800px){
+	#ctl00_ctl00_ContentPlaceHolder_RightContentPlaceHolder_dgDane tr td:nth-child(8),
+	#ctl00_ctl00_ContentPlaceHolder_RightContentPlaceHolder_dgDane tr td:nth-child(9),
+	#ctl00_ctl00_ContentPlaceHolder_RightContentPlaceHolder_dgDane tr td:nth-child(10){
+		display:none;
+	}
+}

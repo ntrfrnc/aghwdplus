@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <title>AGH Wirtualny dziekanat+</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="options.css"/>
+  </head>
+  <body>
+    <div class="wrapper">
+
+      <h1>AGH Wirtualny dziekanat+</h1>
+
+      <input id="visEnhancements" type="checkbox"> <label for="visEnhancements">Zmień wygląd wirtualnego dziekanatu </label>
+      <br>
+      <input id="newMarksNotify" type="checkbox"> <label for="newMarksNotify">Powiadamiaj o nowych ocenach</label>
+
+      <br>
+
+      <div id="notify-fieldset">
+        <label>Identyfikator</label>
+        <input id="login" type="text">
+        <label>Hasło</label>
+        <input id="password" type="password">
+        <label>Sprawdzaj oceny co [min]</label>
+        <input id="checkInterval" type="number" min="5" >
+      </div>
+
+      <br><br>
+
+      <button id="submit">Zapisz</button>
+      <button id="reset">Resetuj</button>
+
+      <div id="message"></div>
+
+    </div>
+    
+    <script src="options.js"></script>
+  </body>
+</html>

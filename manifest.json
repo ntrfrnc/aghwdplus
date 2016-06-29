@@ -1,0 +1,41 @@
+{
+  "manifest_version": 2,
+  "name": "AGH Wirtualny dziekanat+",
+  "version": "1.0",
+  "description": "Zmienia wygląd wirtualnego dziekanatu, pokazuje oceny w dymku i powiadamia o nowych. By żyło się lepiej!",
+  "icons": {"20": "icons/20.png", "48": "icons/48.png", "64": "icons/64.png", "128": "icons/128.png"},
+
+  "permissions": [
+    "tabs",
+    "https://dziekanat.agh.edu.pl/*",
+    "storage",
+    "background",
+    "notifications",
+    "alarms"
+  ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://dziekanat.agh.edu.pl/*"],
+      "js": ["wd.js"]
+    }
+  ],
+
+  "web_accessible_resources": [
+    "wd.css",
+    "icons/agh_logo.png"
+  ],
+
+  "options_page": "options/options.html",
+
+  "browser_action": {
+    "default_icon": "icons/20.png",
+    "default_title": "AGH Wirtualny dziekanat+",
+    "default_popup": "popup/popup.html"
+  }
+}
