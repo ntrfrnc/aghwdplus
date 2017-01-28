@@ -38,8 +38,10 @@ function saveChanges() {
     storage.set(settings, function () {
       chrome.alarms.clear('aghwebplus', function (wasCleared) {
         if (settings.newMarksNotify) {
-          chrome.alarms.create('aghwebplus', {delayInMinutes: Number(settings.checkInterval)});
-          chrome.runtime.sendMessage('updateMarks');
+          chrome.alarms.create('aghwebplus', {
+            when: Date.now(),
+            periodInMinutes: Number(settings.checkInterval)
+          });
         }
       });
 
