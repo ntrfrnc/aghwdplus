@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "AGH Wirtualny dziekanat+",
-  "version": "1.0",
-  "description": "Zmienia wygląd wirtualnego dziekanatu, pokazuje oceny w dymku i powiadamia o nowych. By żyło się lepiej!",
+  "version": "0.1-alpha",
+  "description": "Zmienia wygląd wirtualnego dziekanatu AGH, umożliwia szybki podgląd ocen i powiadamia o nowych ocenach lub ich zmianach.",
   "icons": {
     "20": "images/20.png",
     "48": "images/48.png",
