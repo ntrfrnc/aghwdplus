@@ -6,8 +6,7 @@ Rozszerzenie do przeglądarki Google Chrome. Zmienia wygląd wirtualnego dziekan
 **Wersja:** 0.1-alpha
 
 ![AGH Wirtualny Dziekanat+](images/screenshot_1.png)
-![AGH Wirtualny Dziekanat+ - Popup](images/screenshot_3.png)
-![AGH Wirtualny Dziekanat+ - Opcje](images/screenshot_2.png)
+![AGH Wirtualny Dziekanat+ - Popup, opcje](images/screenshot_2.png)
 
 Jak korzystać
 ----------------
