@@ -3,7 +3,7 @@ AGH Wirtualny Dziekanat+
 
 Rozszerzenie do przeglądarki Google Chrome. Zmienia wygląd wirtualnego dziekanatu AGH, umożliwia szybki podgląd ocen i powiadamia o nowych ocenach lub ich zmianach.  
 
-**Wersja:** 0.1-alpha
+**Wersja:** 0.2-alpha
 
 ![AGH Wirtualny Dziekanat+](images/screenshot_1.png)
 ![AGH Wirtualny Dziekanat+ - Popup, opcje](images/screenshot_2.png)
