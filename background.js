@@ -9,8 +9,10 @@
 function checkForChanges(login, pass) {
   getMarksWebsite(login, pass, function (websiteContent) {
     var marks = getMarks(websiteContent);
+    
     storage.get(['marks'], function (items) {
       var oldMarks = (items.marks) ? JSON.parse(items.marks) : null;
+      
       if (oldMarks) {
         var changes = DeepDiff(marks, oldMarks);
         if (changes) {
@@ -88,7 +90,7 @@ function notify(changes) {
   
   chrome.notifications.create({
     type: 'list',
-    iconUrl: '64.png',
+    iconUrl: 'images/64.png',
     title: 'Nowe oceny!',
     message: 'Lista nowych ocen',
     items: items,
@@ -106,7 +108,7 @@ var defaultSettings = {
   newMarksNotify: false,
   login: '',
   password: '',
-  checkInterval: '5'
+  checkInterval: '30'
 };
 
 chrome.runtime.onInstalled.addListener(function (details) {

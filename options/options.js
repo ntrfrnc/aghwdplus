@@ -33,20 +33,21 @@ function saveChanges() {
     settings[key] = getValue(document.getElementById(key));
   });
 
-  validate(settings, function (result) {
-    if (result) {
-      storage.set(settings, function () {
-        chrome.alarms.clearAll();
+  validate(settings, function () {
+    // On success
+    storage.set(settings, function () {
+      chrome.alarms.clear('aghwebplus', function (wasCleared) {
         if (settings.newMarksNotify) {
-          chrome.alarms.create("", {delayInMinutes: Number(settings.checkInterval)});
+          chrome.alarms.create('aghwebplus', {delayInMinutes: Number(settings.checkInterval)});
           chrome.runtime.sendMessage('updateMarks');
         }
-
-        message('Zapisano ustawienia');
       });
-    } else {
-      message('Wprowadzono złe dane');
-    }
+
+      message('Zapisano ustawienia');
+    });
+  }, function (errorMessage) {
+    // On error
+    message(errorMessage);
   });
 }
 
@@ -67,7 +68,7 @@ function reset() {
       setValue(document.getElementById(key), defaultSettings[key]);
     });
 
-    chrome.alarms.clearAll();
+    chrome.alarms.clear('aghwebplus');
 
     message('Zresetowano ustawienia');
   });
@@ -78,15 +79,15 @@ function message(msg) {
   message.innerText = msg;
   setTimeout(function () {
     message.innerText = '';
-  }, 3000);
+  }, 5000);
 }
 
-function validate(settings, callback) {
+function validate(settings, emitSuccess, emitError) {
   if (settings.newMarksNotify) {
     
     // Validate interval
     if (settings.checkInterval < 5) {
-      callback(false);
+      emitError('Czas między sprawdzaniem ocen nie powinien być mniejszy niż 5 minut');
       return;
     }
 
@@ -95,13 +96,13 @@ function validate(settings, callback) {
     var pass = settings.password;
 
     if (!login.trim() || !pass.trim()) {
-      callback(false);
+      emitError('Proszę wprowadzić identyfikator i hasło');
       return;
     }
 
     storage.get(['login', 'password'], function (items) {
       if (login === items.login && pass === items.password) {
-        callback(true);
+        emitSuccess();
         return;
       }
 
@@ -123,9 +124,9 @@ function validate(settings, callback) {
       xhr.setRequestHeader('HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml; q=0.9,*/*; q=0.8');
       xhr.onload = function () {
         if (/Zła nazwa użytkownika lub hasło/g.test(this.responseText)) {
-          callback(false);
+          emitError('Zła nazwa użytkownika lub hasło');
         } else {
-          callback(true);
+          emitSuccess();
         }
       }
       xhr.send(parameters);
@@ -145,7 +146,7 @@ var defaultSettings = {
   newMarksNotify: false,
   login: '',
   password: '',
-  checkInterval: '5'
+  checkInterval: '30'
 };
 
 var settingsKeys = Object.keys(defaultSettings);
