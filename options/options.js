@@ -36,9 +36,9 @@ function saveChanges() {
   validate(settings, function () {
     // On success
     storage.set(settings, function () {
-      chrome.alarms.clear('aghwebplus', function (wasCleared) {
+      chrome.alarms.clear('refresh', function (wasCleared) {
         if (settings.newMarksNotify) {
-          chrome.alarms.create('aghwebplus', {
+          chrome.alarms.create('refresh', {
             when: Date.now(),
             periodInMinutes: Number(settings.checkInterval)
           });
@@ -70,7 +70,7 @@ function reset() {
       setValue(document.getElementById(key), defaultSettings[key]);
     });
 
-    chrome.alarms.clear('aghwebplus');
+    chrome.alarms.clear('refresh');
 
     message('Zresetowano ustawienia');
   });
@@ -133,6 +133,8 @@ function validate(settings, emitSuccess, emitError) {
       }
       xhr.send(parameters);
     });
+  } else {
+    emitSuccess();
   }
 }
 

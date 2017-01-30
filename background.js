@@ -9,7 +9,7 @@
 function checkForChanges(login, pass) {
   getMarksWebsite(login, pass, function (websiteContent) {
     var marks = getMarks(websiteContent);
-    
+  
     storage.get(['marks'], function (items) {
       var oldMarks = (items.marks) ? JSON.parse(items.marks) : null;
       
@@ -83,8 +83,8 @@ function notify(changes) {
   var items = [];
   changes.forEach(function (change, i) {
     items.push({
-      title: change.path.join(' '),
-      message: String(change.lhs)
+      title: String(change.lhs),
+      message: change.path.join(' ')
     });
   });
   
@@ -111,6 +111,17 @@ var defaultSettings = {
   checkInterval: '30'
 };
 
+chrome.runtime.onStartup.addListener(function () {
+  storage.get(['newMarksNotify', 'checkInterval'], function (items) {
+    if (items.newMarksNotify) {
+      chrome.alarms.create('refresh', {
+        when: Date.now(),
+        periodInMinutes: Number(items.checkInterval)
+      });
+    }
+  });
+});
+
 chrome.runtime.onInstalled.addListener(function (details) {
   if (details.reason === 'install') {
     storage.clear(function () {
@@ -120,9 +131,11 @@ chrome.runtime.onInstalled.addListener(function (details) {
 });
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
-  storage.get(['login', 'password'], function (items) {
-    checkForChanges(items.login, items.password);
-  });
+  if (alarm && alarm.name === 'refresh') {
+    storage.get(['login', 'password'], function (items) {
+      checkForChanges(items.login, items.password);
+    });
+  }
 });
 
 chrome.runtime.onMessage.addListener(function (msg) {
