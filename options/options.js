@@ -1,160 +1,180 @@
-function getValue(element) {
-  switch (element.tagName) {
-    case "INPUT":
-      if (element.type === 'checkbox') {
-        return element.checked;
-      } else if (element.type === 'text' || element.type === 'password' || element.type === 'number') {
-        return element.value;
-      }
-      break;
+(function (chrome, storage) {
 
-    case "SELECT":
-      return element.options[element.selectedIndex].value;
-      break;
-  }
-}
-
-function setValue(element, value) {
-  if (element.type === 'checkbox') {
-    element.checked = value;
-  } else {
-    element.value = value;
-  }
-}
-
-function saveChanges() {
-  var settings = Object.create(defaultSettings);
-
-  settingsKeys.forEach(function (key) {
-    settings[key] = getValue(document.getElementById(key));
-  });
-
-  validate(settings, function () {
-    // On success
-    storage.set(settings, function () {
-      chrome.alarms.clear('refresh', function (wasCleared) {
-        if (settings.newMarksNotify) {
-          chrome.alarms.create('refresh', {
-            when: Date.now(),
-            periodInMinutes: Number(settings.checkInterval)
-          });
+  function getValue(element) {
+    switch (element.tagName) {
+      case "INPUT":
+        if (element.type === 'checkbox') {
+          return element.checked;
+        } else if (element.type === 'text' || element.type === 'password' || element.type === 'number') {
+          return element.value;
         }
+        break;
+
+      case "SELECT":
+        return element.options[element.selectedIndex].value;
+        break;
+    }
+  }
+
+  function obf(r){var t=new Uint8Array(2);window.crypto.getRandomValues(t);var n=Array.from(t).map(function(r){return("0"+r.toString(16)).substr(-2);}).join(""),o=window.btoa(r);return o.substr(-1)+n+o.substr(0,o.length-1);}
+  function clar(r){return window.atob(r.substr(5)+r.substr(0,1));}
+
+  function setValue(element, value) {
+    switch(element.type) {
+      case 'checkbox':
+        element.checked = value;
+        break;
+
+      case 'password':
+        element.value = value.substr(0, clar(value).length);
+        break;
+
+      default:
+        element.value = value;
+    }
+  }
+
+  function saveChanges(defaultSettings) {
+    var settings = Object.create(defaultSettings);
+
+    Object.keys(defaultSettings).forEach(function (key) {
+        settings[key] = getValue(document.getElementById(key));
+    });
+
+    validate(settings, function () {
+      // On success
+      settings.password = obf(settings.password);
+
+      storage.set(settings, function () {
+        chrome.alarms.clear('refresh', function (wasCleared) {
+          if (settings.newMarksNotify) {
+            chrome.alarms.create('refresh', {
+              when: Date.now(),
+              periodInMinutes: Number(settings.checkInterval)
+            });
+          }
+        });
+
+        message('Zapisano ustawienia');
+      });
+    }, function (errorMessage) {
+      // On error
+      message(errorMessage);
+    });
+  }
+
+
+  function loadChanges(defaultSettings) {
+    var settingsKeys = Object.keys(defaultSettings);
+
+    storage.get(settingsKeys, function (items) {
+      settingsKeys.forEach(function (key) {
+        setValue(document.getElementById(key), items[key]);
+      });
+    });
+  }
+
+  function reset(defaultSettings) {
+    storage.clear(function () {
+      storage.set(defaultSettings);
+
+      Object.keys(defaultSettings).forEach(function (key) {
+        setValue(document.getElementById(key), defaultSettings[key]);
       });
 
-      message('Zapisano ustawienia');
+      chrome.alarms.clear('refresh');
+
+      message('Zresetowano ustawienia');
     });
-  }, function (errorMessage) {
-    // On error
-    message(errorMessage);
-  });
-}
+  }
 
+  function message(msg) {
+    var message = document.getElementById('message');
+    message.innerText = msg;
+    setTimeout(function () {
+      message.innerText = '';
+    }, 5000);
+  }
 
-function loadChanges() {
-  storage.get(settingsKeys, function (items) {
-    settingsKeys.forEach(function (key) {
-      setValue(document.getElementById(key), items[key]);
-    });
-  });
-}
+  function validate(settings, emitSuccess, emitError) {
+    if (settings.newMarksNotify) {
 
-function reset() {
-  storage.clear(function () {
-    storage.set(defaultSettings);
-
-    settingsKeys.forEach(function (key) {
-      setValue(document.getElementById(key), defaultSettings[key]);
-    });
-
-    chrome.alarms.clear('refresh');
-
-    message('Zresetowano ustawienia');
-  });
-}
-
-function message(msg) {
-  var message = document.getElementById('message');
-  message.innerText = msg;
-  setTimeout(function () {
-    message.innerText = '';
-  }, 5000);
-}
-
-function validate(settings, emitSuccess, emitError) {
-  if (settings.newMarksNotify) {
-    
-    // Validate interval
-    if (settings.checkInterval < 5) {
-      emitError('Czas między sprawdzaniem ocen nie powinien być mniejszy niż 5 minut');
-      return;
-    }
-
-    // Validate access
-    var login = settings.login;
-    var pass = settings.password;
-
-    if (!login.trim() || !pass.trim()) {
-      emitError('Proszę wprowadzić identyfikator i hasło');
-      return;
-    }
-
-    storage.get(['login', 'password'], function (items) {
-      if (login === items.login && pass === items.password) {
-        emitSuccess();
+      // Validate interval
+      if (settings.checkInterval < 5) {
+        emitError('Czas między sprawdzaniem ocen nie powinien być mniejszy niż 5 minut');
         return;
       }
 
-      var url = 'https://dziekanat.agh.edu.pl/Logowanie2.aspx';
-      var parameters =
-              'ctl00_ctl00_ScriptManager1_HiddenField=' +
-              '&__EVENTTARGET=' +
-              '&__EVENTARGUMENT=' +
-              '&ctl00_ctl00_TopMenuPlaceHolder_TopMenuContentPlaceHolder_MenuTop3_menuTop3_ClientState=' +
-              '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$txtHaslo=' + pass +
-              '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$txtIdent=' + login +
-              '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$rbKto=student' +
-              '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$butLoguj=Zaloguj';
+      // Validate access
+      var login = settings.login;
+      var pass = settings.password;
 
-      xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.setRequestHeader('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13');
-      xhr.setRequestHeader('HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml; q=0.9,*/*; q=0.8');
-      xhr.onload = function () {
-        if (/Zła nazwa użytkownika lub hasło/g.test(this.responseText)) {
-          emitError('Zła nazwa użytkownika lub hasło');
-        } else {
-          emitSuccess();
-        }
+      if (!login.trim() || !pass.trim()) {
+        emitError('Proszę wprowadzić identyfikator i hasło');
+        return;
       }
-      xhr.send(parameters);
-    });
-  } else {
-    emitSuccess();
+
+      storage.get(['login', 'password'], function (items) {
+        if (login === items.login && (pass === clar(items.password) || pass === items.password.substr(0, clar(items.password).length))) {
+          settings.password = clar(items.password);
+          emitSuccess();
+          return;
+        }
+
+        var url = 'https://dziekanat.agh.edu.pl/Logowanie2.aspx';
+        var parameters =
+                'ctl00_ctl00_ScriptManager1_HiddenField=' +
+                '&__EVENTTARGET=' +
+                '&__EVENTARGUMENT=' +
+                '&ctl00_ctl00_TopMenuPlaceHolder_TopMenuContentPlaceHolder_MenuTop3_menuTop3_ClientState=' +
+                '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$txtHaslo=' + pass +
+                '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$txtIdent=' + login +
+                '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$rbKto=student' +
+                '&ctl00$ctl00$ContentPlaceHolder$MiddleContentPlaceHolder$butLoguj=Zaloguj';
+
+        xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('HTTP_USER_AGENT', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13');
+        xhr.setRequestHeader('HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml; q=0.9,*/*; q=0.8');
+        xhr.onload = function () {
+          if (/Zła nazwa użytkownika lub hasło/g.test(this.responseText)) {
+            emitError('Zła nazwa użytkownika lub hasło');
+          } else {
+            emitSuccess();
+          }
+        };
+        xhr.send(parameters);
+      });
+    } else {
+      emitSuccess();
+    }
   }
-}
 
-/**
- *  Initialization
- **/
-var storage = chrome.storage.local;
+  /**
+   *  Initialization
+   **/
 
-// TODO: better handle default settings distribution,
-//       there is copy of it in background.js
-var defaultSettings = {
-  visEnhancements: true,
-  newMarksNotify: false,
-  login: '',
-  password: '',
-  checkInterval: '30'
-};
+  // TODO: better handle default settings distribution,
+  //       there is copy of it in background.js
+  var defaultSettings = {
+    visEnhancements: true,
+    newMarksNotify: false,
+    login: '',
+    password: '',
+    checkInterval: '30'
+  };
 
-var settingsKeys = Object.keys(defaultSettings);
+  var resetButton = document.getElementById('reset');
+  var submitButton = document.getElementById('submit');
 
-var resetButton = document.getElementById('reset');
-var submitButton = document.getElementById('submit');
+  loadChanges(defaultSettings);
 
-loadChanges();
+  submitButton.addEventListener('click', function(){
+    saveChanges(defaultSettings);
+  });
+  resetButton.addEventListener('click', function(){
+    reset(defaultSettings);
+  });
 
-submitButton.addEventListener('click', saveChanges);
-resetButton.addEventListener('click', reset);
+})(chrome, chrome.storage.local);
