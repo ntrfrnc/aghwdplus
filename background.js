@@ -18,7 +18,7 @@ function checkForChanges(login, pass) {
         }
       }
 
-      storage.set({'marks': JSON.stringify(marks)}, function () {
+      storage.set({'marks': JSON.stringify(marks), 'lastCheck': Date.now()}, function () {
         chrome.runtime.sendMessage('marksUpdated');
       });
     });

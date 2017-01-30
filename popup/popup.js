@@ -42,13 +42,7 @@ function renderMarks(marksJSON) {
   return marksHTML;
 }
 
-/**
- *  Initialization
- **/
-var marksWrapper = document.getElementById('marks');
-var refreshBttn = document.getElementById('refreshBttn');
-
-function updateMarksTable() {
+function updateMarksTable(marksWrapper) {
   chrome.storage.local.get('marks', function (items) {
     if (items.marks) {
       marksWrapper.innerHTML = renderMarks(items.marks);
@@ -56,13 +50,28 @@ function updateMarksTable() {
   });
 }
 
-chrome.storage.local.get('newMarksNotify', function (items) {
-  if (!items.newMarksNotify) {
-    refreshBttn.style.display = 'none';
-  }
-})
+function updateRefreshButton(refreshBttn) {
+  chrome.storage.local.get(['newMarksNotify', 'lastCheck'], function (items) {
+    if (!items.newMarksNotify) {
+      refreshBttn.style.display = 'none';
+    }
 
-updateMarksTable();
+    if (items.lastCheck) {
+      var lastCheckDate = new Date(items.lastCheck);
+      var dateTimeString = lastCheckDate.toLocaleTimeString() + ', ' + lastCheckDate.toLocaleDateString();
+      refreshBttn.setAttribute('title', 'Ostatnio sprawdzone: ' + dateTimeString);
+    }
+  });
+}
+
+/**
+ *  Initialization
+ **/
+var refreshBttn = document.getElementById('refreshBttn');
+var marksWrapper = document.getElementById('marks');
+
+updateRefreshButton(refreshBttn);
+updateMarksTable(marksWrapper);
 
 document.getElementById('settingsBttn').addEventListener('click', function (e) {
   e.preventDefault();
@@ -77,7 +86,8 @@ refreshBttn.addEventListener('click', function (e) {
 
 chrome.runtime.onMessage.addListener(function (msg) {
   if (msg === 'marksUpdated') {
-    updateMarksTable();
+    updateRefreshButton(refreshBttn);
+    updateMarksTable(marksWrapper);
     refreshBttn.classList.remove("spin");
   }
 });
