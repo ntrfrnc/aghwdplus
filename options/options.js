@@ -1,7 +1,3 @@
-/**
- *  Functions definitions
- **/
-
 function getValue(element) {
   switch (element.tagName) {
     case "INPUT":
@@ -139,7 +135,7 @@ function validate(settings, emitSuccess, emitError) {
 }
 
 /**
- *  Logic
+ *  Initialization
  **/
 var storage = chrome.storage.local;
 

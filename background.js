@@ -1,5 +1,3 @@
-/* Functions definitions */
-
 /*!
  * deep-diff.
  * Licensed under the MIT License.

@@ -42,6 +42,9 @@ function renderMarks(marksJSON) {
   return marksHTML;
 }
 
+/**
+ *  Initialization
+ **/
 var marksWrapper = document.getElementById('marks');
 var refreshBttn = document.getElementById('refreshBttn');
 
