@@ -87,10 +87,19 @@
   });
 
   chrome.runtime.onMessage.addListener(function (msg) {
-    if (msg === 'marksUpdated') {
-      updateRefreshButton(refreshBttn);
-      updateMarksTable(marksWrapper);
-      refreshBttn.classList.remove("spin");
+    switch (msg) {
+      case 'marksUpdated':
+        updateRefreshButton(refreshBttn);
+        updateMarksTable(marksWrapper);
+        refreshBttn.classList.remove("spin");
+        refreshBttn.classList.remove("error");
+        break;
+
+      case 'marksUpdatingError':
+        refreshBttn.classList.remove("spin");
+        refreshBttn.classList.add("error");
+        refreshBttn.setAttribute('title', 'Błąd połączenia z serwerem');
+        break;
     }
   });
 

@@ -79,6 +79,9 @@ h3 {
 #refreshBttn::-moz-focus-inner {
   border: 0;
 }
+.error svg path{
+  fill: #ec330d;
+}
 .spin{
   animation: spin 1s linear infinite;
 }

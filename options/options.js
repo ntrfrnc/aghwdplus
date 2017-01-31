@@ -157,6 +157,9 @@
             emitSuccess();
           }
         };
+        xhr.onerror = function () {
+          emitError('Błąd połączenia z serwerem.');
+        };
         xhr.send(parameters);
       });
     } else {

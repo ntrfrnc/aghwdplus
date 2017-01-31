@@ -8,6 +8,11 @@
   
   function checkForChanges(login, pass) {
     getMarksWebsite(login, pass, function (websiteContent) {
+      if(websiteContent === null){
+        chrome.runtime.sendMessage('marksUpdatingError');
+        return;
+      }
+      
       var marks = getMarks(websiteContent);
 
       storage.get(['marks'], function (items) {
@@ -77,7 +82,10 @@
     xhr.setRequestHeader('HTTP_ACCEPT', 'text/html,application/xhtml+xml,application/xml; q=0.9,*/*; q=0.8');
     xhr.onload = function () {
       onLoad(this.responseText);
-    }
+    };
+    xhr.onerror = function () {
+      onLoad(null);
+    };
     xhr.send(parameters);
   }
 
