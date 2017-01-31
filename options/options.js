@@ -34,7 +34,10 @@
     }
   }
 
-  function saveChanges(defaultSettings) {
+  function saveChanges(defaultSettings, loaderElement) {
+    message.clear();
+    loaderElement.classList.remove('hidden');
+    
     var settings = Object.create(defaultSettings);
 
     Object.keys(defaultSettings).forEach(function (key) {
@@ -54,15 +57,16 @@
             });
           }
         });
-
-        message('Zapisano ustawienia');
+        
+        loaderElement.classList.add('hidden');
+        message.show('Zapisano ustawienia');
       });
     }, function (errorMessage) {
       // On error
-      message(errorMessage);
+      loaderElement.classList.add('hidden');
+      message.show(errorMessage);
     });
   }
-
 
   function loadChanges(defaultSettings) {
     var settingsKeys = Object.keys(defaultSettings);
@@ -74,7 +78,10 @@
     });
   }
 
-  function reset(defaultSettings) {
+  function reset(defaultSettings, loaderElement) {
+    message.clear();
+    loaderElement.classList.add('hidden');
+    
     storage.clear(function () {
       storage.set(defaultSettings);
 
@@ -84,17 +91,23 @@
 
       chrome.alarms.clear('refresh');
 
-      message('Zresetowano ustawienia');
+      message.show('Zresetowano ustawienia');
     });
   }
 
-  function message(msg) {
-    var message = document.getElementById('message');
-    message.innerText = msg;
-    setTimeout(function () {
-      message.innerText = '';
-    }, 5000);
-  }
+  var message = (function () {
+    var messageEl = document.getElementById('message');
+
+    return {
+      show: function (msg) {
+        messageEl.innerText = msg;
+      },
+      clear: function () {
+        messageEl.innerText = '';
+      }
+    };
+  })();
+
 
   function validate(settings, emitSuccess, emitError) {
     if (settings.newMarksNotify) {
@@ -167,14 +180,16 @@
 
   var resetButton = document.getElementById('reset');
   var submitButton = document.getElementById('submit');
+  var loaderElement = document.getElementById('loader');
 
   loadChanges(defaultSettings);
 
   submitButton.addEventListener('click', function(){
-    saveChanges(defaultSettings);
+    saveChanges(defaultSettings, loaderElement);
   });
+  
   resetButton.addEventListener('click', function(){
-    reset(defaultSettings);
+    reset(defaultSettings, loaderElement);
   });
 
 })(chrome, chrome.storage.local);
