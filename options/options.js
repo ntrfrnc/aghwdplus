@@ -113,8 +113,8 @@
     if (settings.newMarksNotify) {
 
       // Validate interval
-      if (settings.checkInterval < 5) {
-        emitError('Czas między sprawdzaniem ocen nie powinien być mniejszy niż 5 minut');
+      if (settings.checkInterval < 30) {
+        emitError('Czas między sprawdzaniem ocen nie powinien być mniejszy niż 30 minut. Mniejsza wartość grozi zbanowaniem konta.');
         return;
       }
 
@@ -178,7 +178,7 @@
     newMarksNotify: false,
     login: '',
     password: '',
-    checkInterval: '30'
+    checkInterval: '60'
   };
 
   var resetButton = document.getElementById('reset');

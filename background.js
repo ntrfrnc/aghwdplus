@@ -116,7 +116,7 @@
     newMarksNotify: false,
     login: '',
     password: '',
-    checkInterval: '30'
+    checkInterval: '60'
   };
 
   chrome.runtime.onStartup.addListener(function () {
