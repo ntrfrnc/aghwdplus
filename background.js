@@ -41,12 +41,12 @@
     var marksRows = marksTable.querySelectorAll('tr:not(:first-child)');
     [].forEach.call(marksRows, function (marksRow, i) {
       var subjectCase = {};
-      var caseName = marksRow.querySelector('td:nth-child(2)').textContent;
+      var caseName = marksRow.querySelector('td:nth-child(3)').textContent;
       var markPattern = /^[^<>]+(?=<br>)|[^<>]+(?=<\/span><br>)/g;
-      subjectCase['Ocena'] = marksRow.querySelector('td:nth-child(3)').innerHTML.match(markPattern);
-      subjectCase['Termin 1'] = marksRow.querySelector('td:nth-child(4)').innerHTML.match(markPattern);
-      subjectCase['Termin 2'] = marksRow.querySelector('td:nth-child(5)').innerHTML.match(markPattern);
-      subjectCase['Termin 3'] = marksRow.querySelector('td:nth-child(6)').innerHTML.match(markPattern);
+      subjectCase['Ocena'] = marksRow.querySelector('td:nth-child(4)').innerHTML.match(markPattern);
+      subjectCase['Termin 1'] = marksRow.querySelector('td:nth-child(5)').innerHTML.match(markPattern);
+      subjectCase['Termin 2'] = marksRow.querySelector('td:nth-child(6)').innerHTML.match(markPattern);
+      subjectCase['Termin 3'] = marksRow.querySelector('td:nth-child(7)').innerHTML.match(markPattern);
 
       var subject = marksRow.querySelector('td:first-child').textContent;
       var prevSubject = (i === 0) ? '' : marksRows[i - 1].querySelector('td:first-child').textContent;
