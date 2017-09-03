@@ -151,9 +151,9 @@ a[href="#"]:hover {
   padding-bottom: 0px;
 }
 #page_top_menu {
-  top: auto;
-  left: auto;
-  position: relative;
+  top: 6px;
+  left: 6px;
+  position: absolute;
 }
 #page_language {
   padding: 0px;
